@@ -20,10 +20,10 @@ jobs:
             core/project/package-lock.json
       - run: |
           cd core/lerna
-          npm ci
+          npm install
       - run: |
           cd core/project
-          npm ci
+          npm install
   tests-without-cache-dependency-path:
     name: node ${{ matrix.node-version }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -39,7 +39,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: |
           cd core/lerna
-          npm ci
+          npm install
       - run: |
           cd core/project
-          npm ci
+          npm install
