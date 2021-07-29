@@ -1,0 +1,45 @@
+name: tests
+on: [workflow_dispatch]
+jobs:
+  tests-with-cache-dependency-path:
+    name: node ${{ matrix.node-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [16, 14, 12]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: |
+            core/lerna/package-lock.json
+            core/project/package-lock.json
+      - run: |
+          cd core/lerna
+          npm ci
+      - run: |
+          cd core/project
+          npm ci
+  tests-without-cache-dependency-path:
+    name: node ${{ matrix.node-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [16, 14, 12]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          cd core/lerna
+          npm ci
+      - run: |
+          cd core/project
+          npm ci
